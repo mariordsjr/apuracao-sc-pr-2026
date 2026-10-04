@@ -1,137 +1,829 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#174a78">
 <title>Apuração 2026 — SC + PR</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f4f6f8;color:#17202a}
-header{background:#123b63;color:#fff;padding:18px 16px;position:sticky;top:0;z-index:5;box-shadow:0 2px 10px #0002}
-h1{font-size:22px;margin:0 0 4px}.sub{opacity:.85;font-size:13px}
-.wrap{max-width:1100px;margin:auto;padding:16px}
-.controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
-select,input,button{width:100%;padding:11px;border:1px solid #ccd4dc;border-radius:9px;background:#fff;font-size:15px}
-button{background:#123b63;color:#fff;border:0;font-weight:700;cursor:pointer}
-.status{background:#fff;border:1px solid #dde3e8;border-radius:10px;padding:10px;margin-bottom:14px;font-size:13px}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-.card{background:#fff;border:1px solid #dde3e8;border-radius:10px;padding:13px}.label{font-size:12px;color:#66717d}.value{font-size:21px;font-weight:800;margin-top:4px}
-h2{font-size:18px;margin:18px 0 10px}.tablewrap{overflow:auto;background:#fff;border:1px solid #dde3e8;border-radius:10px}
-table{width:100%;border-collapse:collapse;min-width:650px}th,td{padding:10px;border-bottom:1px solid #edf0f2;text-align:left;font-size:14px}th{background:#f7f8fa;font-size:12px;color:#59636e;position:sticky;top:0}
-.num{text-align:right}.candidate{font-weight:700}.party{color:#66717d;font-size:12px}.bar{height:6px;background:#e8edf1;border-radius:8px;overflow:hidden;margin-top:5px}.fill{height:100%;background:#2f78b7}
-.note{font-size:12px;color:#65717d;margin-top:12px;line-height:1.45}
-.error{color:#a42626}.ok{color:#18733b}
-@media(max-width:700px){.controls,.cards{grid-template-columns:1fr 1fr}.controls .wide{grid-column:1/-1}h1{font-size:19px}}
-@media(max-width:430px){.cards{grid-template-columns:1fr 1fr}.wrap{padding:10px}}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f6f8;
+  color: #17212b;
+}
+
+header {
+  background: #174a78;
+  color: white;
+  padding: 28px 20px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+}
+
+header p {
+  margin: 0;
+  font-size: 16px;
+  opacity: .9;
+}
+
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+select,
+input,
+button {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #cbd3d8;
+  font-size: 16px;
+  background: white;
+}
+
+input {
+  margin-top: 12px;
+}
+
+button {
+  margin-top: 12px;
+  background: #174a78;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(.99);
+}
+
+.status {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #d6dde1;
+}
+
+.status.ok {
+  color: #14733c;
+}
+
+.status.error {
+  color: #a52e2e;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #d6dde1;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.card span {
+  display: block;
+  color: #68747d;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.card strong {
+  font-size: 22px;
+}
+
+section {
+  margin-top: 22px;
+}
+
+section h2 {
+  margin-bottom: 10px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #d6dde1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+}
+
+th,
+td {
+  padding: 13px 12px;
+  border-bottom: 1px solid #e4e8eb;
+  text-align: left;
+}
+
+th {
+  background: #eef2f5;
+  color: #56616a;
+}
+
+td.num,
+th.num {
+  text-align: right;
+}
+
+.position {
+  font-weight: bold;
+}
+
+.candidate {
+  font-weight: bold;
+}
+
+.party {
+  color: #68747d;
+  font-size: 14px;
+}
+
+.vote {
+  font-weight: bold;
+}
+
+.pct {
+  color: #174a78;
+  font-weight: bold;
+}
+
+footer {
+  margin: 25px 0 10px;
+  color: #68747d;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+  .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  header h1 {
+    font-size: 24px;
+  }
+
+  main {
+    padding: 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
+
 <body>
-<header><div class="wrap" style="padding:0"><h1>Apuração 2026 — Santa Catarina + Paraná</h1><div class="sub">Dados oficiais do TSE • atualização automática a cada 30 segundos</div></div></header>
-<main class="wrap">
-<section class="controls">
-<select id="uf"><option value="sc">Santa Catarina (SC)</option><option value="pr">Paraná (PR)</option></select>
-<select id="cargo">
-<option value="0003">Governador</option>
-<option value="0005">Senador</option>
-<option value="0006">Deputado Federal</option>
-<option value="0007">Deputado Estadual</option>
-</select>
-<input id="busca" class="wide" placeholder="Buscar candidato ou partido..." autocomplete="off">
-</section>
-<button id="refresh">Atualizar agora</button>
-<div id="status" class="status">Carregando...</div>
-<div class="cards">
-<div class="card"><div class="label">Seções totalizadas</div><div class="value" id="sec">—</div></div>
-<div class="card"><div class="label">Votos apurados</div><div class="value" id="votes">—</div></div>
-<div class="card"><div class="label">Candidatos exibidos</div><div class="value" id="count">—</div></div>
-<div class="card"><div class="label">Última atualização</div><div class="value" id="time">—</div></div>
-</div>
-<h2>Votação</h2>
-<div class="tablewrap">
-<table><thead><tr><th>#</th><th>Candidato</th><th>Partido</th><th class="num">Votos</th><th class="num">%</th></tr></thead>
-<tbody id="tbody"><tr><td colspan="5">Carregando...</td></tr></tbody></table>
-</div>
-<div class="note">
-<strong>Fonte:</strong> arquivos públicos de resultados do Tribunal Superior Eleitoral (TSE).
-Este painel apenas apresenta os dados recebidos; não é o site oficial do TSE.
-Para deputado federal e deputado estadual, a ordem de votos individuais não representa, sozinha, a distribuição final das cadeiras, pois a eleição é proporcional.
-</div>
+
+<header>
+  <h1>Apuração 2026 — Santa Catarina + Paraná</h1>
+  <p>Dados públicos do TSE • atualização automática a cada 30 segundos</p>
+</header>
+
+<main>
+
+  <div class="controls">
+
+    <select id="uf">
+      <option value="sc">Santa Catarina (SC)</option>
+      <option value="pr">Paraná (PR)</option>
+    </select>
+
+    <select id="cargo">
+      <option value="3">Governador</option>
+      <option value="5">Senador</option>
+      <option value="6">Deputado Federal</option>
+      <option value="7">Deputado Estadual</option>
+    </select>
+
+  </div>
+
+  <input
+    id="busca"
+    type="search"
+    placeholder="Buscar candidato, partido ou número..."
+  >
+
+  <button id="atualizar">
+    Atualizar agora
+  </button>
+
+  <div id="status" class="status">
+    Carregando dados do TSE...
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <span>Seções totalizadas</span>
+      <strong id="secoes">—</strong>
+    </div>
+
+    <div class="card">
+      <span>Votos válidos</span>
+      <strong id="votos">—</strong>
+    </div>
+
+    <div class="card">
+      <span>Candidatos exibidos</span>
+      <strong id="quantidade">—</strong>
+    </div>
+
+    <div class="card">
+      <span>Última atualização</span>
+      <strong id="hora">—</strong>
+    </div>
+
+  </div>
+
+  <section>
+    <h2 id="titulo">Votação</h2>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Candidato</th>
+            <th>Partido</th>
+            <th class="num">Votos</th>
+            <th class="num">%</th>
+          </tr>
+        </thead>
+
+        <tbody id="resultado">
+
+          <tr>
+            <td colspan="5">
+              Carregando...
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+  <footer>
+    <strong>Fonte:</strong> arquivos públicos de resultados do Tribunal
+    Superior Eleitoral (TSE).<br>
+    Este painel é independente e não é o site oficial do TSE.
+  </footer>
+
 </main>
+
 <script>
-const ELEICAO = "6259";
-const BASE = "https://resultados.tse.jus.br/oficial/ele2026/" + ELEICAO + "/dados/";
-const nomes = { "0003":"Governador","0005":"Senador","0006":"Deputado Federal","0007":"Deputado Estadual" };
-let last = [];
 
-function fmt(n){return new Intl.NumberFormat("pt-BR").format(Number(n)||0)}
-function pct(n){return (Number(n)||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})+"%"}
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+const TSE_BASE =
+  "https://resultados.tse.jus.br/oficial/ele2026/6259/dados";
 
-function get(obj,...keys){
-  for(const k of keys) if(obj && obj[k]!==undefined && obj[k]!==null) return obj[k];
-  return "";
-}
-function extractCandidates(data){
-  const arr = data?.cand || data?.candidatos || data?.candidatosVotacao || data?.candVotos || [];
-  if(Array.isArray(arr)) return arr;
-  return [];
-}
-function extractNumber(data, keys){
-  for(const k of keys){
-    const v=get(data,k);
-    if(v!=="" && !isNaN(Number(v))) return Number(v);
+const cargos = {
+  3: {
+    nome: "Governador",
+    vagas: 1
+  },
+  5: {
+    nome: "Senador",
+    vagas: 2
+  },
+  6: {
+    nome: "Deputado Federal",
+    vagas: 0
+  },
+  7: {
+    nome: "Deputado Estadual",
+    vagas: 0
   }
-  return 0;
+};
+
+const ufElement = document.getElementById("uf");
+const cargoElement = document.getElementById("cargo");
+const buscaElement = document.getElementById("busca");
+const resultadoElement = document.getElementById("resultado");
+const statusElement = document.getElementById("status");
+
+let candidatosAtuais = [];
+
+function urlTSE(uf, cargo) {
+
+  const cargoFormatado =
+    String(cargo).padStart(4, "0");
+
+  return `${TSE_BASE}/${uf}/${uf}-c${cargoFormatado}-e006259-u.json?ts=${Date.now()}`;
 }
-function normalize(c){
-  return {
-    name:get(c,"nm","nome","name","nomeUrna") || "Candidato",
-    party:get(c,"cc","partido","sgPartido","part") || "",
-    votes:extractNumber(c,["vap","votos","qtVotos","vv"]),
-    pct:extractNumber(c,["pvap","percentual","pct","pcentVotos"])
-  };
-}
-async function load(){
-  const uf=document.getElementById("uf").value;
-  const cargo=document.getElementById("cargo").value;
-  const url=`${BASE}${uf}/${uf}-c${cargo}-e${ELEICAO}-u.json?ts=${Date.now()}`;
-  const status=document.getElementById("status");
-  status.className="status";
-  status.textContent=`Consultando TSE: ${nomes[cargo]} — ${uf.toUpperCase()}...`;
-  try{
-    const r=await fetch(url,{cache:"no-store"});
-    if(!r.ok) throw new Error(`HTTP ${r.status}`);
-    const data=await r.json();
-    last=extractCandidates(data).map(normalize).sort((a,b)=>b.votes-a.votes);
-    render(data);
-    status.className="status ok";
-    status.textContent=`Dados carregados do TSE • ${nomes[cargo]} — ${uf.toUpperCase()} • próxima atualização automática em até 30 segundos.`;
-  }catch(e){
-    document.getElementById("tbody").innerHTML=`<tr><td colspan="5" class="error">Não foi possível carregar os dados (${esc(e.message)}). Se estiver abrindo o HTML diretamente como arquivo, publique-o em um servidor HTTPS, como GitHub Pages.</td></tr>`;
-    status.className="status error";
-    status.textContent="Falha ao consultar os dados. Verifique sua internet ou a publicação do site.";
+
+function numero(valor) {
+
+  if (
+    valor === null ||
+    valor === undefined ||
+    valor === ""
+  ) {
+    return 0;
   }
+
+  const somenteNumeros =
+    String(valor).replace(/\D/g, "");
+
+  return Number(somenteNumeros) || 0;
 }
-function render(data){
-  const q=document.getElementById("busca").value.trim().toLowerCase();
-  const rows=last.filter(x=>(x.name+" "+x.party).toLowerCase().includes(q));
-  const total=last.reduce((s,x)=>s+x.votes,0);
-  const sec=extractNumber(data,["s","secoes","secoesTotalizadas","st"]);
-  const totalData=extractNumber(data,["v","votos","votosApurados","tvap"]);
-  document.getElementById("sec").textContent=sec?fmt(sec):"—";
-  document.getElementById("votes").textContent=fmt(totalData||total);
-  document.getElementById("count").textContent=fmt(rows.length);
-  document.getElementById("time").textContent=new Date().toLocaleTimeString("pt-BR");
-  document.getElementById("tbody").innerHTML=rows.length?rows.map((x,i)=>`
-    <tr><td>${i+1}</td><td><div class="candidate">${esc(x.name)}</div><div class="bar"><div class="fill" style="width:${Math.min(x.pct,100)}%"></div></div></td>
-    <td class="party">${esc(x.party)}</td><td class="num">${fmt(x.votes)}</td><td class="num">${pct(x.pct)}</td></tr>`).join("")
-    : `<tr><td colspan="5">Nenhum candidato encontrado.</td></tr>`;
+
+function formatarNumero(valor) {
+
+  return Number(valor || 0)
+    .toLocaleString("pt-BR");
 }
-document.getElementById("refresh").onclick=load;
-document.getElementById("uf").onchange=load;
-document.getElementById("cargo").onchange=load;
-document.getElementById("busca").oninput=()=>render(last);
-load();
-setInterval(load,30000);
+
+function formatarPercentual(valor) {
+
+  const n = Number(valor);
+
+  if (!Number.isFinite(n)) {
+    return "0,00%";
+  }
+
+  return n.toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + "%";
+}
+
+function nomeCandidato(c) {
+
+  return String(
+    c.nmu ||
+    c.nm ||
+    c.nome ||
+    "Nome não informado"
+  ).trim();
+}
+
+function nomePartido(c) {
+
+  return String(
+    c._partySigla ||
+    c.sg ||
+    c.partido ||
+    "—"
+  ).trim();
+}
+
+function numeroCandidato(c) {
+
+  return String(
+    c.n ||
+    c.nu ||
+    c.numero ||
+    ""
+  ).trim();
+}
+
+function extrairCandidatos(data) {
+
+  /*
+    Estrutura EA20 do TSE:
+
+    carg[]
+      └── agr[]
+            └── par[]
+                  └── cand[]
+  */
+
+  const candidatos = [];
+
+  if (Array.isArray(data.cand)) {
+    return data.cand;
+  }
+
+  const cargosData =
+    Array.isArray(data.carg)
+      ? data.carg
+      : [];
+
+  for (const cargo of cargosData) {
+
+    const agregacoes =
+      Array.isArray(cargo.agr)
+        ? cargo.agr
+        : [];
+
+    for (const agr of agregacoes) {
+
+      const partidos =
+        Array.isArray(agr.par)
+          ? agr.par
+          : [];
+
+      for (const partido of partidos) {
+
+        const lista =
+          Array.isArray(partido.cand)
+            ? partido.cand
+            : [];
+
+        for (const candidato of lista) {
+
+          candidatos.push({
+            ...candidato,
+
+            _partySigla:
+              partido.sg || "",
+
+            _partyName:
+              partido.nm || "",
+
+            _partyNumber:
+              partido.n || ""
+          });
+
+        }
+
+      }
+
+    }
+
+  }
+
+  return candidatos;
+}
+
+function percentualDoCandidato(candidato, total) {
+
+  /*
+    O TSE pode fornecer pvap.
+    Caso não exista, calculamos usando os votos.
+  */
+
+  if (
+    candidato.pvap !== undefined &&
+    candidato.pvap !== null &&
+    candidato.pvap !== ""
+  ) {
+
+    let valor =
+      Number(
+        String(candidato.pvap)
+          .replace(",", ".")
+          .replace("%", "")
+      );
+
+    if (Number.isFinite(valor)) {
+      return valor;
+    }
+
+  }
+
+  const votos =
+    numero(candidato.vap);
+
+  if (!total) {
+    return 0;
+  }
+
+  return (votos / total) * 100;
+}
+
+function progresso(data) {
+
+  /*
+    pst = percentual de seções totalizadas.
+  */
+
+  const valor =
+    data?.s?.pst ??
+    data?.pst;
+
+  if (
+    valor === undefined ||
+    valor === null ||
+    valor === ""
+  ) {
+    return "—";
+  }
+
+  const n =
+    Number(
+      String(valor)
+        .replace(",", ".")
+        .replace("%", "")
+    );
+
+  if (!Number.isFinite(n)) {
+    return "—";
+  }
+
+  return formatarPercentual(n);
+}
+
+function filtrarCandidatos() {
+
+  const busca =
+    buscaElement.value
+      .trim()
+      .toLowerCase();
+
+  if (!busca) {
+    return candidatosAtuais;
+  }
+
+  return candidatosAtuais.filter(c => {
+
+    const texto = [
+
+      nomeCandidato(c),
+
+      nomePartido(c),
+
+      c._partyName || "",
+
+      numeroCandidato(c)
+
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return texto.includes(busca);
+
+  });
+}
+
+function mostrarTabela() {
+
+  const lista =
+    filtrarCandidatos();
+
+  const total =
+    candidatosAtuais.reduce(
+      (soma, c) =>
+        soma + numero(c.vap),
+      0
+    );
+
+  document.getElementById("quantidade")
+    .textContent =
+      lista.length.toLocaleString("pt-BR");
+
+  if (!lista.length) {
+
+    resultadoElement.innerHTML = `
+      <tr>
+        <td colspan="5">
+          Nenhum candidato encontrado.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  resultadoElement.innerHTML =
+    lista.map((c, index) => {
+
+      const votos =
+        numero(c.vap);
+
+      const percentual =
+        percentualDoCandidato(
+          c,
+          total
+        );
+
+      return `
+        <tr>
+
+          <td class="position">
+            ${index + 1}º
+          </td>
+
+          <td>
+            <div class="candidate">
+              ${nomeCandidato(c)}
+            </div>
+
+            <div class="party">
+              Nº ${numeroCandidato(c)}
+            </div>
+          </td>
+
+          <td>
+            <div class="party">
+              ${nomePartido(c)}
+            </div>
+          </td>
+
+          <td class="num vote">
+            ${formatarNumero(votos)}
+          </td>
+
+          <td class="num pct">
+            ${formatarPercentual(percentual)}
+          </td>
+
+        </tr>
+      `;
+
+    }).join("");
+
+}
+
+async function carregar() {
+
+  const uf =
+    ufElement.value;
+
+  const cargo =
+    cargoElement.value;
+
+  const cargoInfo =
+    cargos[cargo];
+
+  document.getElementById("titulo")
+    .textContent =
+      `Votação — ${cargoInfo.nome} — ${uf.toUpperCase()}`;
+
+  statusElement.className =
+    "status";
+
+  statusElement.textContent =
+    "Consultando os dados públicos do TSE...";
+
+  try {
+
+    const url =
+      urlTSE(uf, cargo);
+
+    const resposta =
+      await fetch(url, {
+        cache: "no-store",
+        headers: {
+          "Accept":
+            "application/json"
+        }
+      });
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        `HTTP ${resposta.status}`
+      );
+
+    }
+
+    const data =
+      await resposta.json();
+
+    candidatosAtuais =
+      extrairCandidatos(data);
+
+    candidatosAtuais.sort(
+      (a, b) =>
+        numero(b.vap) -
+        numero(a.vap)
+    );
+
+    const total =
+      candidatosAtuais.reduce(
+        (soma, c) =>
+          soma + numero(c.vap),
+        0
+      );
+
+    document.getElementById("votos")
+      .textContent =
+        formatarNumero(total);
+
+    document.getElementById("secoes")
+      .textContent =
+        progresso(data);
+
+    const agora =
+      new Date();
+
+    document.getElementById("hora")
+      .textContent =
+        agora.toLocaleTimeString(
+          "pt-BR"
+        );
+
+    mostrarTabela();
+
+    statusElement.className =
+      "status ok";
+
+    statusElement.textContent =
+      `Dados carregados com sucesso • TSE • ${uf.toUpperCase()} • ${cargoInfo.nome}`;
+
+  } catch (erro) {
+
+    console.error(erro);
+
+    candidatosAtuais = [];
+
+    resultadoElement.innerHTML = `
+      <tr>
+        <td colspan="5">
+          Não foi possível carregar os dados.
+          Erro: ${erro.message}
+        </td>
+      </tr>
+    `;
+
+    document.getElementById("secoes")
+      .textContent = "—";
+
+    document.getElementById("votos")
+      .textContent = "—";
+
+    document.getElementById("quantidade")
+      .textContent = "—";
+
+    document.getElementById("hora")
+      .textContent = "—";
+
+    statusElement.className =
+      "status error";
+
+    statusElement.textContent =
+      `Falha ao consultar o TSE: ${erro.message}`;
+  }
+
+}
+
+ufElement.addEventListener(
+  "change",
+  carregar
+);
+
+cargoElement.addEventListener(
+  "change",
+  carregar
+);
+
+buscaElement.addEventListener(
+  "input",
+  mostrarTabela
+);
+
+document.getElementById("atualizar")
+  .addEventListener(
+    "click",
+    carregar
+  );
+
+/*
+  Atualização automática:
+  a cada 30 segundos.
+*/
+
+setInterval(
+  carregar,
+  30000
+);
+
+carregar();
+
 </script>
+
 </body>
 </html>
